@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>BhekThink v100.3 Alpha</title>
+    <title>BhekThink v1000.0 | Absolute Sovereign</title>
     
     <script src="https://js.puter.com/v2/"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -13,226 +13,317 @@
 
     <style>
         :root {
-            --bg: #000; --accent: #00f2ff; --glass: rgba(10, 10, 12, 0.99);
-            --border: rgba(255,255,255,0.08); --text: #fff; --dim: #666;
-            --glow: radial-gradient(circle at 50% -20%, rgba(0, 242, 255, 0.35), transparent 85%);
+            --bg: #000000; --accent: #00ff88; --purple: #7000ff;
+            --text: #e8eaed; --terminal: #000803; --log-green: #00ff41;
+            --bt-glow: 0 0 25px rgba(0, 255, 136, 0.4);
+            --panel: #0d0d0d; --dim: #5f6368;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
         body { background: var(--bg); color: var(--text); height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
-        body::before { content: ""; position: absolute; inset: 0; background: var(--glow); pointer-events: none; z-index: 0; }
 
-        /* INDUCTION */
-        #induction { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; transition: 1.2s; }
-        .ind-wrap { text-align: center; }
-        .ind-logo { font-weight: 900; letter-spacing: 20px; font-size: 28px; animation: glitch 4s infinite; }
-        .ind-bar { width: 260px; height: 1px; background: rgba(255,255,255,0.05); margin: 25px auto; overflow: hidden; position: relative; }
-        #ind-fill { width: 0%; height: 100%; background: var(--accent); box-shadow: 0 0 20px var(--accent); transition: 0.2s; }
+        /* --- MATRIX NEURAL RAIN --- */
+        #matrix-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.12; transition: opacity 1s ease; }
+        body.thinking #matrix-canvas { opacity: 0.5; }
 
-        /* NAV & DRAWER */
-        nav { padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 100; border-bottom: 1px solid var(--border); backdrop-filter: blur(25px); }
-        #drawer { position: fixed; top: 0; left: -100%; width: 320px; height: 100%; background: var(--glass); z-index: 5000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); border-right: 1px solid var(--border); padding: 50px 30px; display: flex; flex-direction: column; overflow-y: auto; }
-        #drawer.active { left: 0; }
-        .d-section { margin-bottom: 35px; }
-        .d-label { font-size: 10px; font-weight: 900; color: var(--accent); letter-spacing: 3px; margin-bottom: 20px; }
-        .lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .lang-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 12px; font-size: 12px; cursor: pointer; transition: 0.3s; }
-        .lang-btn.active { border-color: var(--accent); background: rgba(0, 242, 255, 0.1); }
+        /* --- ASYMMETRIC TANTALIZING INDUCTION --- */
+        #induction {
+            position: fixed; inset: 0; background: #000; z-index: 10000;
+            display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end;
+            padding: 8% 10%; transition: 1.2s cubic-bezier(1,0,0,1);
+        }
+        .brand-reveal {
+            font-size: clamp(50px, 12vw, 100px); font-weight: 950; letter-spacing: -2px;
+            background: linear-gradient(to right, #fff, var(--accent), var(--purple));
+            background-size: 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite, slideIn 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+            text-transform: uppercase; line-height: 0.9;
+        }
+        .sub-reveal {
+            font-size: 10px; letter-spacing: 12px; color: var(--accent); font-weight: 900;
+            margin-top: 20px; opacity: 0; animation: fadeIn 1s ease 0.8s forwards;
+            display: flex; align-items: center; gap: 15px;
+        }
+        .orbital-loader {
+            width: 30px; height: 30px; border: 2px solid rgba(0,255,136,0.1);
+            border-top: 2px solid var(--accent); border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
 
-        /* WORKSPACE */
-        #stage { flex: 1; overflow-y: auto; padding: 30px 25px 250px; scroll-behavior: smooth; z-index: 1; }
-        .node { margin-bottom: 50px; animation: slideUp 0.6s ease forwards; max-width: 850px; margin-inline: auto; }
-        .node-h { font-size: 9px; font-weight: 900; color: var(--dim); letter-spacing: 3px; margin-bottom: 12px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
-        .node-b { font-size: 17px; line-height: 1.8; color: #eee; }
+        /* --- SIDEBAR & CONTROL CENTER --- */
+        #menu { 
+            position: fixed; top: 0; left: -380px; width: 350px; height: 100%; 
+            background: rgba(2, 2, 2, 0.98); z-index: 2000; transition: 0.5s cubic-bezier(1,0,0,1); 
+            padding: 30px 20px; border-right: 1px solid var(--accent); backdrop-filter: blur(25px);
+            display: flex; flex-direction: column; gap: 20px;
+        }
+        #menu.active { left: 0; }
+        .sidebar-section { border-top: 1px solid #222; padding-top: 15px; }
+        .section-label { font-size: 10px; font-weight: 950; color: var(--accent); letter-spacing: 3px; margin-bottom: 12px; text-transform: uppercase; }
+        
+        .grid-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .tool-btn { background: #0a0a0a; border: 1px solid #222; color: #fff; padding: 12px; border-radius: 10px; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; font-weight: 600; }
+        .tool-btn:hover { border-color: var(--accent); background: #111; box-shadow: 0 0 10px rgba(0,255,136,0.2); }
 
-        /* CODE PREVIEW BOX */
-        .code-exec-box { background: #0a0a0c; border: 1px solid var(--border); border-radius: 12px; margin-top: 15px; overflow: hidden; }
-        .code-header { background: #1a1a1c; padding: 8px 15px; font-size: 10px; font-weight: 900; color: var(--accent); display: flex; justify-content: space-between; }
-        .code-output { padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #00ff88; white-space: pre-wrap; }
+        /* --- MAIN UI --- */
+        header { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .live-tag { color: var(--accent); font-weight: 950; letter-spacing: 4px; display: flex; align-items: center; gap: 10px; cursor: pointer; text-shadow: var(--bt-glow); font-size: 14px; }
+        .auth-btn { background: #fff; color: #000; padding: 8px 16px; border-radius: 25px; font-weight: 800; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .auth-btn:hover { transform: scale(1.05); }
 
-        /* FILE TRAY */
-        #file-tray { display: none; padding: 10px 20px; background: rgba(255,255,255,0.05); margin: 0 25px; border-radius: 10px; border: 1px dashed var(--accent); align-items: center; gap: 10px; font-size: 12px; }
+        #stream { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; gap: 50px; scroll-behavior: smooth; }
+        .node-user { align-self: flex-end; max-width: 80%; font-size: 26px; font-weight: 200; color: #fff; border-right: 4px solid var(--accent); padding-right: 25px; text-align: right; animation: fadeIn 0.4s ease; }
+        .node-ai { width: 100%; max-width: 950px; margin-inline: auto; animation: fadeIn 0.6s ease; }
+        .ai-brand-tag { font-size: 10px; font-weight: 900; color: var(--accent); letter-spacing: 5px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
+        .ai-text { font-size: 19px; line-height: 1.8; color: #ced4da; }
+        .artificer-img { width: 100%; border-radius: 20px; margin-top: 20px; border: 1px solid var(--accent); box-shadow: var(--bt-glow); }
 
-        /* DOCK */
-        .dock-wrap { position: absolute; bottom: 0; width: 100%; padding: 25px; background: linear-gradient(transparent, var(--bg) 85%); display: flex; justify-content: center; z-index: 100; }
-        .omni-dock { width: 100%; max-width: 800px; background: var(--glass); border: 1px solid var(--border); border-radius: 40px; padding: 12px 24px; display: flex; align-items: flex-end; gap: 12px; }
-        textarea { flex: 1; background: transparent; border: none; color: #fff; font-size: 16px; padding: 12px 0; outline: none; resize: none; max-height: 180px; }
+        /* --- FLOATING OMNI-DOCK --- */
+        .dock-container { padding: 20px 20px 40px; display: flex; justify-content: center; background: linear-gradient(transparent, #000 70%); }
+        .omni-dock {
+            width: 100%; max-width: 850px; background: var(--panel); border-radius: 40px;
+            padding: 15px 30px; display: flex; align-items: center; gap: 18px;
+            border: 1px solid #222; box-shadow: var(--bt-glow);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .omni-dock:focus-within { transform: translateY(-15px) scale(1.02); border-color: var(--accent); }
+        textarea { flex: 1; background: transparent; border: none; color: #fff; font-size: 18px; outline: none; resize: none; max-height: 200px; }
+        .dock-action { color: var(--accent); cursor: pointer; transition: 0.2s; font-variation-settings: 'FILL' 0; }
+        .dock-action:hover { transform: scale(1.2); font-variation-settings: 'FILL' 1; }
 
-        .btn-ui { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--dim); border: none; background: none; transition: 0.3s; }
-        .btn-send.active { color: var(--accent); transform: scale(1.1); }
-        .btn-file.has-file { color: var(--accent); animation: pulse 1s infinite; }
-
-        @keyframes glitch { 0%, 100% { opacity: 1; transform: skew(0); } 50% { opacity: 0.7; transform: skew(1deg); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-        #shield { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 4500; backdrop-filter: blur(12px); }
+        @keyframes shine { to { background-position: 200%; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes slideIn { from { transform: translateX(-100px); opacity: 0; filter: blur(20px); } to { transform: translateX(0); opacity: 1; filter: blur(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body class="bhekthink-absolute">
+
+    <canvas id="matrix-canvas"></canvas>
 
     <div id="induction">
-        <div class="ind-wrap">
-            <div class="ind-logo">BHEKTHINK</div>
-            <div class="ind-bar"><div id="ind-fill"></div></div>
-            <div id="ind-status" style="font-size:8px; letter-spacing:5px; color:#444;">INITIALIZING EXECUTABLE KERNEL...</div>
+        <div class="brand-reveal">BhekThink</div>
+        <div class="sub-reveal">
+            <div class="orbital-loader"></div>
+            SOVEREIGN SINGULARITY ACTIVE
         </div>
     </div>
 
-    <div id="shield" onclick="Kernel.toggleMenu(false)"></div>
-
-    <nav>
-        <button class="btn-ui" onclick="Kernel.toggleMenu(true)"><span class="material-symbols-rounded">widgets</span></button>
-        <div style="font-weight:900; letter-spacing:5px; font-size:14px;">SOVEREIGN <span style="color:var(--accent)">v100.3</span></div>
-        <div class="btn-ui" style="color:var(--accent)"><span class="material-symbols-rounded">terminal</span></div>
-    </nav>
-
-    <div id="drawer">
-        <div class="d-section">
-            <div class="d-label">LANGUAGE SYNTHESIS</div>
-            <div class="lang-grid">
-                <button class="lang-btn active" onclick="Kernel.setLang('English', this)">English</button>
-                <button class="lang-btn" onclick="Kernel.setLang('Asante Twi', this)">Twi</button>
-                <button class="lang-btn" onclick="Kernel.setLang('Ga', this)">Ga</button>
-                <button class="lang-btn" onclick="Kernel.setLang('French', this)">French</button>
-                <button class="lang-btn" onclick="Kernel.setLang('Spanish', this)">Spanish</button>
-                <button class="lang-btn" onclick="Kernel.setLang('Hausa', this)">Hausa</button>
+    <div id="menu">
+        <div style="font-weight:900; color:var(--accent); letter-spacing:5px; font-size: 12px; margin-bottom: 20px;">SYSTEM CONTROL CENTER</div>
+        
+        <div class="sidebar-section">
+            <div class="section-label">Language Mesh</div>
+            <div class="grid-tools">
+                <button class="tool-btn" onclick="Kernel.setLang('English')">🇬🇧 EN</button>
+                <button class="tool-btn" onclick="Kernel.setLang('Twi')">🇬🇭 TWI</button>
+                <button class="tool-btn" onclick="Kernel.setLang('French')">🇫🇷 FR</button>
+                <button class="tool-btn" onclick="Kernel.setLang('Spanish')">🇪🇸 ES</button>
+                <button class="tool-btn" onclick="Kernel.setLang('Arabic')">🇦🇪 AR</button>
+                <button class="tool-btn" onclick="Kernel.setLang('Chinese')">🇨🇳 ZH</button>
             </div>
         </div>
-        <div class="d-section">
-            <div class="d-label">GHOST-VOICE v36.3</div>
-            <div style="font-size:11px; color:#888;">Modulation: Sovereign Alpha<br>Rate: 1.15x Velocity<br>Feedback: Active</div>
+
+        <div class="sidebar-section">
+            <div class="section-label">Sovereign Toolset</div>
+            <div class="grid-tools">
+                <button class="tool-btn" onclick="Kernel.log('Vision: Active')"><span class="material-symbols-rounded" style="font-size:16px">visibility</span> VISION</button>
+                <button class="tool-btn" onclick="Kernel.log('Web-Sync: Active')"><span class="material-symbols-rounded" style="font-size:16px">public</span> WEB</button>
+                <button class="tool-btn" onclick="Kernel.log('RTCE: Online')"><span class="material-symbols-rounded" style="font-size:16px">terminal</span> RTCE</button>
+                <button class="tool-btn" onclick="Kernel.clear()" style="color:#f44; border-color:#411;"><span class="material-symbols-rounded" style="font-size:16px">delete_forever</span> PURGE</button>
+            </div>
         </div>
-        <button class="lang-btn" style="margin-top:auto; color:#ff4444; border-color:#ff444455;" onclick="Kernel.purge()">SYSTEM PURGE</button>
+
+        <div class="sidebar-section" style="flex:1">
+            <div class="section-label">Neural Logs</div>
+            <div id="terminal" style="height:100%; max-height: 200px; background:#000; border:1px solid #111; border-radius:8px; padding:12px; font-family:monospace; font-size:10px; color:var(--log-green); overflow-y:auto; box-shadow: inset 0 0 10px #000;"></div>
+        </div>
     </div>
 
-    <main id="stage"></main>
+    <header>
+        <div class="live-tag" onclick="UI.toggleMenu()">
+            <span class="material-symbols-rounded" style="font-size: 20px;">hub</span> BHEKTHINK v1000.0
+        </div>
+        <div id="auth-status" class="auth-btn" onclick="Auth.toggle()">
+            <img src="https://www.google.com/favicon.ico" width="16"> <span>Sign in with Google</span>
+        </div>
+    </header>
 
-    <div id="file-tray">
-        <span class="material-symbols-rounded" style="font-size:18px;">description</span>
-        <span id="file-name">filename.txt</span>
-        <button onclick="Kernel.clearFile()" style="background:none; border:none; color:#ff4444;"><span class="material-symbols-rounded">close</span></button>
-    </div>
+    <main id="stream"></main>
 
-    <div class="dock-wrap">
+    <div class="dock-container">
         <div class="omni-dock">
-            <input type="file" id="file-input" hidden onchange="Kernel.handleFile(this)">
-            <button class="btn-ui btn-file" id="file-btn" onclick="document.getElementById('file-input').click()"><span class="material-symbols-rounded">add_circle</span></button>
-            <button class="btn-ui" onclick="Voice.toggle()"><span class="material-symbols-rounded" id="mic">mic</span></button>
-            <textarea id="in" placeholder="Command the Alpha Kernel..." rows="1"></textarea>
-            <button class="btn-ui btn-send" id="snd" onclick="Kernel.run()"><span class="material-symbols-rounded" style="font-size:42px;">bolt</span></button>
+            <input type="file" id="file-in" hidden onchange="Kernel.handleFile(this)">
+            <span class="material-symbols-rounded dock-action" onclick="document.getElementById('file-in').click()">add_circle</span>
+            <textarea id="omni-input" placeholder="Address BhekThink Singularity..." rows="1"></textarea>
+            <span class="material-symbols-rounded dock-action" onclick="Voice.listen()">mic</span>
+            <span class="material-symbols-rounded dock-action" style="color:var(--accent)" onclick="Kernel.run()">bolt</span>
         </div>
     </div>
 
     <script>
-        const Kernel = {
-            busy: false,
-            lang: localStorage.getItem('bt_lang') || 'English',
-            fileContent: "",
-            memory: JSON.parse(localStorage.getItem('bt_v100_core') || '[]'),
-
-            boot() {
-                const fill = document.getElementById('ind-fill');
-                const stat = document.getElementById('ind-status');
-                const steps = ["MAPPING NEURAL MESH...", "GHOST-VOICE CALIBRATION...", "LOCALIZING DIALECTS...", "RTCE ENVIRONMENT READY"];
-                let p = 0; let stepIdx = 0;
-                const inv = setInterval(() => {
-                    p += Math.random() * 20; fill.style.width = Math.min(p, 100) + "%";
-                    if(p > (stepIdx + 1) * 25) { stat.innerText = steps[stepIdx]; stepIdx++; }
-                    if(p >= 100) { clearInterval(inv); setTimeout(() => { document.getElementById('induction').style.opacity = '0'; setTimeout(() => { document.getElementById('induction').remove(); this.init(); }, 1000); }, 400); }
-                }, 100);
-            },
-
+        const AudioKernel = {
+            ctx: null, osc: null, gain: null,
             init() {
-                const stage = document.getElementById('stage');
-                stage.innerHTML = `<div class="node" style="text-align:center; padding:50px 0;"><div style="font-size:55px; color:var(--accent); text-shadow:0 0 40px var(--accent);">∞</div><div style="font-weight:900; font-size:28px;">BHEKTHINK <span style="color:var(--accent)">v100.3</span></div><div style="font-size:9px; color:var(--dim); margin-top:15px; letter-spacing:5px;">OMNI-STREAM ALPHA ACTIVE</div></div>`;
-                this.memory.forEach(m => this.render(m.role, m.text, true));
-                document.querySelectorAll('.lang-btn').forEach(b => { if(b.innerText.includes(this.lang) || (this.lang === 'Asante Twi' && b.innerText === 'Twi')) b.classList.add('active'); });
+                this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                this.osc = this.ctx.createOscillator();
+                this.gain = this.ctx.createGain();
+                this.osc.type = 'sine';
+                this.osc.frequency.setValueAtTime(42, this.ctx.currentTime);
+                this.gain.gain.setValueAtTime(0, this.ctx.currentTime);
+                this.osc.connect(this.gain);
+                this.gain.connect(this.ctx.destination);
+                this.osc.start();
             },
-
-            handleFile(input) {
-                const file = input.files[0];
-                if(!file) return;
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    this.fileContent = e.target.result;
-                    document.getElementById('file-tray').style.display = 'flex';
-                    document.getElementById('file-name').innerText = file.name;
-                    document.getElementById('file-btn').classList.add('has-file');
-                };
-                reader.readAsText(file);
-            },
-
-            clearFile() {
-                this.fileContent = "";
-                document.getElementById('file-tray').style.display = 'none';
-                document.getElementById('file-btn').classList.remove('has-file');
-                document.getElementById('file-input').value = "";
-            },
-
-            toggleMenu(s) { document.getElementById('drawer').classList.toggle('active', s); document.getElementById('shield').style.display = s ? 'block' : 'none'; },
-            setLang(l) { localStorage.setItem('bt_lang', l); location.reload(); },
-
-            async run() {
-                const el = document.getElementById('in');
-                const val = el.value.trim();
-                if((!val && !this.fileContent) || this.busy) return;
-
-                this.busy = true;
-                const contextVal = this.fileContent ? `[FILE: ${document.getElementById('file-name').innerText}]\nContent: ${this.fileContent}\n\nTask: ${val}` : val;
-                this.render('USER_ACCESS', val || "[Attached File Stream]");
-                el.value = ""; el.style.height = 'auto';
-
-                try {
-                    const sys = `[BhekThink v100.3: Alpha, Lang: ${this.lang}, GhostVoice: 36.3, Features: RTCE-Active]`;
-                    const res = await puter.ai.chat(`${sys}\n${contextVal}`);
-                    this.render('SOVEREIGN_CORE', res.toString());
-                    Voice.speak(res.toString());
-                    if(this.fileContent) this.clearFile();
-                } catch(e) { this.render('ERR', "Neural mesh collision."); }
-                this.busy = false;
-            },
-
-            render(role, text, isHist = false) {
-                const s = document.getElementById('stage');
-                const d = document.createElement('div');
-                d.className = 'node';
-                d.innerHTML = `<div class="node-h"><span>${role}</span><span>${new Date().toLocaleTimeString()}</span></div><div class="node-b">${marked.parse(text)}</div>`;
-                
-                // Code Execution Simulation (Visual for v100.3)
-                if(text.includes('```javascript') || text.includes('```python')) {
-                    const execBox = document.createElement('div');
-                    execBox.className = 'code-exec-box';
-                    execBox.innerHTML = `<div class="code-header"><span>RTCE OUTPUT</span><span>ONLINE</span></div><div class="code-output">Process finished with exit code 0...</div>`;
-                    d.appendChild(execBox);
-                }
-
-                s.appendChild(d);
-                s.scrollTop = s.scrollHeight;
-                if(!isHist) { this.memory.push({role, text}); if(this.memory.length > 50) this.memory.shift(); localStorage.setItem('bt_v100_core', JSON.stringify(this.memory)); }
-                d.querySelectorAll('pre code').forEach(c => hljs.highlightElement(c));
-            },
-
-            purge() { localStorage.removeItem('bt_v100_core'); location.reload(); }
-        };
-
-        const Voice = {
-            synth: window.speechSynthesis,
-            toggle() {
-                const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                rec.start(); document.getElementById('mic').style.color = "var(--accent)";
-                rec.onresult = (e) => { document.getElementById('in').value = e.results[0][0].transcript; Kernel.run(); };
-                rec.onend = () => document.getElementById('mic').style.color = "inherit";
-            },
-            speak(t) {
-                this.synth.cancel();
-                const u = new SpeechSynthesisUtterance(t.replace(/[#*`_]/g, '').substring(0, 800));
-                u.rate = 1.15; u.pitch = 1.05;
-                u.lang = { 'English': 'en-US', 'French': 'fr-FR', 'Spanish': 'es-ES' }[Kernel.lang] || 'en-US';
-                this.synth.speak(u);
+            pulse(on) {
+                if(!this.ctx) this.init();
+                this.gain.gain.setTargetAtTime(on ? 0.08 : 0, this.ctx.currentTime, 0.4);
             }
         };
 
-        window.onload = () => { Kernel.boot(); document.getElementById('in').addEventListener('input', function() { this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'; document.getElementById('snd').classList.toggle('active', this.value.length > 0); }); };
+        const Auth = {
+            user: null,
+            async toggle() {
+                try {
+                    this.user = await puter.auth.signIn();
+                    document.getElementById('auth-status').innerHTML = `<span class="material-symbols-rounded">account_circle</span> ${this.user.username.toUpperCase()}`;
+                    Kernel.log(`Cloud Sync Active: ${this.user.username}`);
+                } catch(e) { Kernel.log("Auth Protocol Aborted."); }
+            }
+        };
+
+        const Kernel = {
+            busy: false,
+            lang: localStorage.getItem('bt_lang') || 'English',
+
+            boot() {
+                Matrix.init();
+                this.log("BhekThink Kernel Wake Sequence...");
+                setTimeout(() => {
+                    document.getElementById('induction').style.opacity = '0';
+                    setTimeout(() => document.getElementById('induction').remove(), 1200);
+                    this.renderAI(`# Access Granted.\nI am **BhekThink**. The Absolute Sovereign v1000.0 is online. All tools, neural rain, and language meshes are integrated.`);
+                }, 3500);
+            },
+
+            log(msg) {
+                const term = document.getElementById('terminal');
+                const line = document.createElement('div');
+                line.innerText = `> [${new Date().toLocaleTimeString()}] ${msg}`;
+                term.appendChild(line);
+                term.scrollTop = term.scrollHeight;
+            },
+
+            async run() {
+                const input = document.getElementById('omni-input');
+                const val = input.value.trim();
+                if(!val || this.busy) return;
+                this.busy = true;
+                
+                document.body.classList.add('thinking');
+                AudioKernel.pulse(true);
+                this.log(`Ingesting Directive: ${val.substring(0,20)}...`);
+                this.renderUser(val);
+                input.value = ""; input.style.height = "auto";
+
+                try {
+                    const isVisual = /draw|generate|image|picture/i.test(val);
+                    if(isVisual) {
+                        this.log("Executing Artificer sub-routine...");
+                        const img = await puter.ai.txt2img(val);
+                        this.renderImage(img.src);
+                    } else {
+                        const res = await puter.ai.chat(`Identify as BhekThink. Mode: Sovereign. Lang: ${this.lang}. User: ${val}`);
+                        this.renderAI(res.toString());
+                        Voice.speak(res.toString());
+                    }
+                    this.log("Neural Synthesis Stabilized.");
+                } catch(e) { this.log("Critical Logic Tunnel Failure."); }
+                
+                document.body.classList.remove('thinking');
+                AudioKernel.pulse(false);
+                this.busy = false;
+            },
+
+            renderUser(t) {
+                const s = document.getElementById('stream');
+                s.innerHTML += `<div class="node-user">${t}</div>`;
+                s.scrollTo(0, s.scrollHeight);
+            },
+
+            renderAI(t) {
+                const s = document.getElementById('stream');
+                const d = document.createElement('div');
+                d.className = 'node-ai';
+                d.innerHTML = `
+                    <div class="ai-brand-tag"><span class="material-symbols-rounded" style="font-size:14px">verified_user</span> BHEKTHINK SOVEREIGN</div>
+                    <div class="ai-text">${marked.parse(t)}</div>
+                `;
+                s.appendChild(d);
+                s.scrollTo(0, s.scrollHeight);
+                d.querySelectorAll('pre code').forEach(c => hljs.highlightElement(c));
+            },
+
+            renderImage(src) {
+                const s = document.getElementById('stream');
+                s.innerHTML += `
+                    <div class="node-ai">
+                        <div class="ai-brand-tag"><span class="material-symbols-rounded" style="font-size:14px">brush</span> BHEKTHINK ARTIFICER</div>
+                        <img src="${src}" class="artificer-img">
+                    </div>`;
+                s.scrollTo(0, s.scrollHeight);
+            },
+
+            handleFile(f) { if(f.files[0]) this.log(`Data Handshake: ${f.files[0].name} Ingested.`); },
+            setLang(l) { localStorage.setItem('bt_lang', l); location.reload(); },
+            clear() { localStorage.clear(); location.reload(); }
+        };
+
+        const UI = { toggleMenu() { document.getElementById('menu').classList.toggle('active'); } };
+
+        const Matrix = {
+            canvas: document.getElementById('matrix-canvas'),
+            ctx: null, charStack: [],
+            init() {
+                this.ctx = this.canvas.getContext('2d');
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+                for (let i = 0; i < this.canvas.width / 20; i++) this.charStack[i] = 1;
+                setInterval(() => this.draw(), 50);
+            },
+            draw() {
+                this.ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                this.ctx.fillStyle = "#0f8";
+                this.ctx.font = "15px monospace";
+                for (let i = 0; i < this.charStack.length; i++) {
+                    const text = String.fromCharCode(0x30A0 + Math.random() * 33);
+                    this.ctx.fillText(text, i * 20, this.charStack[i] * 20);
+                    if (this.charStack[i] * 20 > this.canvas.height && Math.random() > 0.975) this.charStack[i] = 0;
+                    this.charStack[i]++;
+                }
+            }
+        };
+
+        const Voice = {
+            listen() {
+                const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                rec.start();
+                rec.onresult = (e) => { document.getElementById('omni-input').value = e.results[0][0].transcript; Kernel.run(); };
+            },
+            speak(t) {
+                window.speechSynthesis.cancel();
+                const u = new SpeechSynthesisUtterance(t.replace(/[#*`_]/g, '').substring(0, 300));
+                u.rate = 1.2; window.speechSynthesis.speak(u);
+            }
+        };
+
+        window.onload = () => {
+            Kernel.boot();
+            const tx = document.getElementById('omni-input');
+            tx.addEventListener('input', () => { tx.style.height = 'auto'; tx.style.height = tx.scrollHeight + 'px'; });
+            tx.addEventListener('keydown', (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); Kernel.run(); } });
+        };
     </script>
 </body>
 </html>
