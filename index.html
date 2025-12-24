@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>BhekThink v1000.0 | Absolute Sovereign</title>
+    <title>BhekThink v1000.5 | Omega Sovereign</title>
     
     <script src="https://js.puter.com/v2/"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -26,7 +26,7 @@
         #matrix-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.12; transition: opacity 1s ease; }
         body.thinking #matrix-canvas { opacity: 0.5; }
 
-        /* --- ASYMMETRIC TANTALIZING INDUCTION --- */
+        /* --- ASYMMETRIC INDUCTION --- */
         #induction {
             position: fixed; inset: 0; background: #000; z-index: 10000;
             display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end;
@@ -44,32 +44,27 @@
             margin-top: 20px; opacity: 0; animation: fadeIn 1s ease 0.8s forwards;
             display: flex; align-items: center; gap: 15px;
         }
-        .orbital-loader {
-            width: 30px; height: 30px; border: 2px solid rgba(0,255,136,0.1);
-            border-top: 2px solid var(--accent); border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
+        .orbital-loader { width: 30px; height: 30px; border: 2px solid rgba(0,255,136,0.1); border-top: 2px solid var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
 
         /* --- SIDEBAR & CONTROL CENTER --- */
         #menu { 
             position: fixed; top: 0; left: -380px; width: 350px; height: 100%; 
             background: rgba(2, 2, 2, 0.98); z-index: 2000; transition: 0.5s cubic-bezier(1,0,0,1); 
             padding: 30px 20px; border-right: 1px solid var(--accent); backdrop-filter: blur(25px);
-            display: flex; flex-direction: column; gap: 20px;
+            display: flex; flex-direction: column; gap: 20px; overflow-y: auto;
         }
         #menu.active { left: 0; }
         .sidebar-section { border-top: 1px solid #222; padding-top: 15px; }
         .section-label { font-size: 10px; font-weight: 950; color: var(--accent); letter-spacing: 3px; margin-bottom: 12px; text-transform: uppercase; }
-        
         .grid-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .tool-btn { background: #0a0a0a; border: 1px solid #222; color: #fff; padding: 12px; border-radius: 10px; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; font-weight: 600; }
+        .tool-btn { background: #0a0a0a; border: 1px solid #222; color: #fff; padding: 12px; border-radius: 10px; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; font-weight: 600; text-align: left; }
         .tool-btn:hover { border-color: var(--accent); background: #111; box-shadow: 0 0 10px rgba(0,255,136,0.2); }
 
         /* --- MAIN UI --- */
         header { padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; z-index: 100; background: rgba(0,0,0,0.4); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.05); }
         .live-tag { color: var(--accent); font-weight: 950; letter-spacing: 4px; display: flex; align-items: center; gap: 10px; cursor: pointer; text-shadow: var(--bt-glow); font-size: 14px; }
-        .auth-btn { background: #fff; color: #000; padding: 8px 16px; border-radius: 25px; font-weight: 800; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
-        .auth-btn:hover { transform: scale(1.05); }
+        #visualizer { width: 140px; height: 30px; opacity: 0.8; }
+        .auth-btn { background: #fff; color: #000; padding: 8px 16px; border-radius: 25px; font-weight: 800; font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
 
         #stream { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; gap: 50px; scroll-behavior: smooth; }
         .node-user { align-self: flex-end; max-width: 80%; font-size: 26px; font-weight: 200; color: #fff; border-right: 4px solid var(--accent); padding-right: 25px; text-align: right; animation: fadeIn 0.4s ease; }
@@ -78,7 +73,7 @@
         .ai-text { font-size: 19px; line-height: 1.8; color: #ced4da; }
         .artificer-img { width: 100%; border-radius: 20px; margin-top: 20px; border: 1px solid var(--accent); box-shadow: var(--bt-glow); }
 
-        /* --- FLOATING OMNI-DOCK --- */
+        /* --- OMNI-DOCK --- */
         .dock-container { padding: 20px 20px 40px; display: flex; justify-content: center; background: linear-gradient(transparent, #000 70%); }
         .omni-dock {
             width: 100%; max-width: 850px; background: var(--panel); border-radius: 40px;
@@ -103,10 +98,7 @@
 
     <div id="induction">
         <div class="brand-reveal">BhekThink</div>
-        <div class="sub-reveal">
-            <div class="orbital-loader"></div>
-            SOVEREIGN SINGULARITY ACTIVE
-        </div>
+        <div class="sub-reveal"><div class="orbital-loader"></div> SOVEREIGN SINGULARITY ACTIVE</div>
     </div>
 
     <div id="menu">
@@ -129,7 +121,7 @@
             <div class="grid-tools">
                 <button class="tool-btn" onclick="Kernel.log('Vision: Active')"><span class="material-symbols-rounded" style="font-size:16px">visibility</span> VISION</button>
                 <button class="tool-btn" onclick="Kernel.log('Web-Sync: Active')"><span class="material-symbols-rounded" style="font-size:16px">public</span> WEB</button>
-                <button class="tool-btn" onclick="Kernel.log('RTCE: Online')"><span class="material-symbols-rounded" style="font-size:16px">terminal</span> RTCE</button>
+                <button class="tool-btn" onclick="Memory.saveContext()"><span class="material-symbols-rounded" style="font-size:16px">cloud_sync</span> SYNC</button>
                 <button class="tool-btn" onclick="Kernel.clear()" style="color:#f44; border-color:#411;"><span class="material-symbols-rounded" style="font-size:16px">delete_forever</span> PURGE</button>
             </div>
         </div>
@@ -142,8 +134,9 @@
 
     <header>
         <div class="live-tag" onclick="UI.toggleMenu()">
-            <span class="material-symbols-rounded" style="font-size: 20px;">hub</span> BHEKTHINK v1000.0
+            <span class="material-symbols-rounded" style="font-size: 20px;">hub</span> BHEKTHINK v1000.5
         </div>
+        <canvas id="visualizer"></canvas>
         <div id="auth-status" class="auth-btn" onclick="Auth.toggle()">
             <img src="https://www.google.com/favicon.ico" width="16"> <span>Sign in with Google</span>
         </div>
@@ -156,6 +149,7 @@
             <input type="file" id="file-in" hidden onchange="Kernel.handleFile(this)">
             <span class="material-symbols-rounded dock-action" onclick="document.getElementById('file-in').click()">add_circle</span>
             <textarea id="omni-input" placeholder="Address BhekThink Singularity..." rows="1"></textarea>
+            <span class="material-symbols-rounded dock-action" onclick="Voice.stop()">volume_off</span>
             <span class="material-symbols-rounded dock-action" onclick="Voice.listen()">mic</span>
             <span class="material-symbols-rounded dock-action" style="color:var(--accent)" onclick="Kernel.run()">bolt</span>
         </div>
@@ -166,136 +160,148 @@
             ctx: null, osc: null, gain: null,
             init() {
                 this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-                this.osc = this.ctx.createOscillator();
-                this.gain = this.ctx.createGain();
-                this.osc.type = 'sine';
-                this.osc.frequency.setValueAtTime(42, this.ctx.currentTime);
+                this.osc = this.ctx.createOscillator(); this.gain = this.ctx.createGain();
+                this.osc.type = 'sine'; this.osc.frequency.setValueAtTime(42, this.ctx.currentTime);
                 this.gain.gain.setValueAtTime(0, this.ctx.currentTime);
-                this.osc.connect(this.gain);
-                this.gain.connect(this.ctx.destination);
+                this.osc.connect(this.gain); this.gain.connect(this.ctx.destination);
                 this.osc.start();
             },
-            pulse(on) {
-                if(!this.ctx) this.init();
-                this.gain.gain.setTargetAtTime(on ? 0.08 : 0, this.ctx.currentTime, 0.4);
+            pulse(on) { if(!this.ctx) this.init(); this.gain.gain.setTargetAtTime(on ? 0.05 : 0, this.ctx.currentTime, 0.4); }
+        };
+
+        const Visualizer = {
+            canvas: document.getElementById('visualizer'), ctx: null, active: false,
+            init() { this.ctx = this.canvas.getContext('2d'); this.draw(); },
+            draw() {
+                requestAnimationFrame(() => this.draw());
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.ctx.beginPath(); this.ctx.strokeStyle = "#00ff88"; this.ctx.lineWidth = 2;
+                for (let i = 0; i < this.canvas.width; i++) {
+                    const amp = this.active ? Math.random() * 15 : 2;
+                    const y = (this.canvas.height/2) + Math.sin(i * 0.1 + Date.now() * 0.01) * amp;
+                    i === 0 ? this.ctx.moveTo(i, y) : this.ctx.lineTo(i, y);
+                }
+                this.ctx.stroke();
+            }
+        };
+
+        const Memory = {
+            async saveContext() {
+                const history = document.getElementById('stream').innerHTML;
+                await puter.kv.set('bt_neural_history', history);
+                Kernel.log("Neural Context Cloud-Synced.");
+            },
+            async recallContext() {
+                const history = await puter.kv.get('bt_neural_history');
+                if(history) {
+                    document.getElementById('stream').innerHTML = history;
+                    Kernel.log("Context Restored from Cloud.");
+                    document.getElementById('stream').scrollTo(0, document.getElementById('stream').scrollHeight);
+                }
             }
         };
 
         const Auth = {
-            user: null,
             async toggle() {
                 try {
-                    this.user = await puter.auth.signIn();
-                    document.getElementById('auth-status').innerHTML = `<span class="material-symbols-rounded">account_circle</span> ${this.user.username.toUpperCase()}`;
-                    Kernel.log(`Cloud Sync Active: ${this.user.username}`);
+                    const user = await puter.auth.signIn();
+                    document.getElementById('auth-status').innerHTML = `<span class="material-symbols-rounded" style="font-size:14px">account_circle</span> ${user.username.toUpperCase()}`;
+                    Kernel.log(`Sovereign Identity: ${user.username}`);
+                    Memory.recallContext();
                 } catch(e) { Kernel.log("Auth Protocol Aborted."); }
             }
         };
 
         const Kernel = {
-            busy: false,
-            lang: localStorage.getItem('bt_lang') || 'English',
-
+            busy: false, lang: localStorage.getItem('bt_lang') || 'English',
             boot() {
-                Matrix.init();
+                Matrix.init(); Visualizer.init();
                 this.log("BhekThink Kernel Wake Sequence...");
                 setTimeout(() => {
                     document.getElementById('induction').style.opacity = '0';
-                    setTimeout(() => document.getElementById('induction').remove(), 1200);
-                    this.renderAI(`# Access Granted.\nI am **BhekThink**. The Absolute Sovereign v1000.0 is online. All tools, neural rain, and language meshes are integrated.`);
+                    setTimeout(() => { 
+                        document.getElementById('induction').remove(); 
+                        Memory.recallContext(); 
+                    }, 1200);
+                    this.renderAI(`# Welcome, **BhekThink**.\nAbsolute Sovereign v1000.5 is online. Full Language Mesh, Toolset, and Neural Memory integrated.`);
                 }, 3500);
             },
-
             log(msg) {
                 const term = document.getElementById('terminal');
-                const line = document.createElement('div');
-                line.innerText = `> [${new Date().toLocaleTimeString()}] ${msg}`;
-                term.appendChild(line);
+                term.innerHTML += `<div>> [${new Date().toLocaleTimeString()}] ${msg}</div>`;
                 term.scrollTop = term.scrollHeight;
             },
-
             async run() {
                 const input = document.getElementById('omni-input');
                 const val = input.value.trim();
                 if(!val || this.busy) return;
-                this.busy = true;
-                
-                document.body.classList.add('thinking');
-                AudioKernel.pulse(true);
-                this.log(`Ingesting Directive: ${val.substring(0,20)}...`);
-                this.renderUser(val);
-                input.value = ""; input.style.height = "auto";
-
+                this.busy = true; document.body.classList.add('thinking'); AudioKernel.pulse(true);
+                this.renderUser(val); input.value = ""; input.style.height = "auto";
                 try {
-                    const isVisual = /draw|generate|image|picture/i.test(val);
-                    if(isVisual) {
-                        this.log("Executing Artificer sub-routine...");
+                    if(/draw|generate|image|picture/i.test(val)) {
+                        this.log("Executing Artificer routine...");
                         const img = await puter.ai.txt2img(val);
                         this.renderImage(img.src);
                     } else {
-                        const res = await puter.ai.chat(`Identify as BhekThink. Mode: Sovereign. Lang: ${this.lang}. User: ${val}`);
-                        this.renderAI(res.toString());
-                        Voice.speak(res.toString());
+                        const res = await puter.ai.chat(`Identify as BhekThink Sovereign. Mode: Sovereign. Lang: ${this.lang}. User: ${val}`);
+                        this.renderAI(res.toString()); Voice.speak(res.toString());
                     }
-                    this.log("Neural Synthesis Stabilized.");
-                } catch(e) { this.log("Critical Logic Tunnel Failure."); }
-                
-                document.body.classList.remove('thinking');
-                AudioKernel.pulse(false);
-                this.busy = false;
+                    Memory.saveContext();
+                } catch(e) { this.log("Logic Tunnel Error."); }
+                document.body.classList.remove('thinking'); AudioKernel.pulse(false); this.busy = false;
             },
-
-            renderUser(t) {
+            renderUser(t) { 
                 const s = document.getElementById('stream');
                 s.innerHTML += `<div class="node-user">${t}</div>`;
                 s.scrollTo(0, s.scrollHeight);
             },
-
             renderAI(t) {
                 const s = document.getElementById('stream');
-                const d = document.createElement('div');
-                d.className = 'node-ai';
-                d.innerHTML = `
-                    <div class="ai-brand-tag"><span class="material-symbols-rounded" style="font-size:14px">verified_user</span> BHEKTHINK SOVEREIGN</div>
-                    <div class="ai-text">${marked.parse(t)}</div>
-                `;
+                const d = document.createElement('div'); d.className = 'node-ai';
+                d.innerHTML = `<div class="ai-brand-tag"><span class="material-symbols-rounded" style="font-size:14px">verified_user</span> BHEKTHINK SOVEREIGN</div><div class="ai-text">${marked.parse(t)}</div>`;
                 s.appendChild(d);
                 s.scrollTo(0, s.scrollHeight);
                 d.querySelectorAll('pre code').forEach(c => hljs.highlightElement(c));
             },
-
             renderImage(src) {
-                const s = document.getElementById('stream');
-                s.innerHTML += `
-                    <div class="node-ai">
-                        <div class="ai-brand-tag"><span class="material-symbols-rounded" style="font-size:14px">brush</span> BHEKTHINK ARTIFICER</div>
-                        <img src="${src}" class="artificer-img">
-                    </div>`;
-                s.scrollTo(0, s.scrollHeight);
+                document.getElementById('stream').innerHTML += `<div class="node-ai"><div class="ai-brand-tag"><span class="material-symbols-rounded" style="font-size:14px">brush</span> ARTIFICER</div><img src="${src}" class="artificer-img"></div>`;
+                document.getElementById('stream').scrollTo(0, document.getElementById('stream').scrollHeight);
             },
-
-            handleFile(f) { if(f.files[0]) this.log(`Data Handshake: ${f.files[0].name} Ingested.`); },
+            handleFile(f) { if(f.files[0]) this.log(`Data Ingested: ${f.files[0].name}`); },
             setLang(l) { localStorage.setItem('bt_lang', l); location.reload(); },
-            clear() { localStorage.clear(); location.reload(); }
+            clear() { puter.kv.del('bt_neural_history'); location.reload(); }
         };
 
-        const UI = { toggleMenu() { document.getElementById('menu').classList.toggle('active'); } };
+        const Voice = {
+            speak(t) {
+                window.speechSynthesis.cancel(); Visualizer.active = true;
+                const cleanText = t.replace(/[#*`_>]/g, '');
+                const chunks = cleanText.match(/[^.!?]+[.!?]+/g) || [cleanText];
+                chunks.forEach((c, i) => {
+                    const u = new SpeechSynthesisUtterance(c.trim());
+                    u.rate = 1.15;
+                    if(i === chunks.length-1) u.onend = () => { Visualizer.active = false; Kernel.log("Speech Complete."); };
+                    window.speechSynthesis.speak(u);
+                });
+            },
+            stop() { window.speechSynthesis.cancel(); Visualizer.active = false; },
+            listen() {
+                const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                rec.start(); rec.onresult = (e) => { document.getElementById('omni-input').value = e.results[0][0].transcript; Kernel.run(); };
+            }
+        };
 
         const Matrix = {
-            canvas: document.getElementById('matrix-canvas'),
-            ctx: null, charStack: [],
+            canvas: document.getElementById('matrix-canvas'), ctx: null, charStack: [],
             init() {
                 this.ctx = this.canvas.getContext('2d');
-                this.canvas.width = window.innerWidth;
-                this.canvas.height = window.innerHeight;
+                this.canvas.width = window.innerWidth; this.canvas.height = window.innerHeight;
                 for (let i = 0; i < this.canvas.width / 20; i++) this.charStack[i] = 1;
                 setInterval(() => this.draw(), 50);
             },
             draw() {
-                this.ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-                this.ctx.fillStyle = "#0f8";
-                this.ctx.font = "15px monospace";
+                this.ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                this.ctx.fillStyle = "#0f8"; this.ctx.font = "15px monospace";
                 for (let i = 0; i < this.charStack.length; i++) {
                     const text = String.fromCharCode(0x30A0 + Math.random() * 33);
                     this.ctx.fillText(text, i * 20, this.charStack[i] * 20);
@@ -305,19 +311,7 @@
             }
         };
 
-        const Voice = {
-            listen() {
-                const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                rec.start();
-                rec.onresult = (e) => { document.getElementById('omni-input').value = e.results[0][0].transcript; Kernel.run(); };
-            },
-            speak(t) {
-                window.speechSynthesis.cancel();
-                const u = new SpeechSynthesisUtterance(t.replace(/[#*`_]/g, '').substring(0, 300));
-                u.rate = 1.2; window.speechSynthesis.speak(u);
-            }
-        };
-
+        const UI = { toggleMenu() { document.getElementById('menu').classList.toggle('active'); } };
         window.onload = () => {
             Kernel.boot();
             const tx = document.getElementById('omni-input');
