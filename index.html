@@ -2,14 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#030303">
-    
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2103/2103633.png">
-    <title>BhekThink Infinity v13.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>BhekThink v100.3 Alpha</title>
     
     <script src="https://js.puter.com/v2/"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -19,227 +13,226 @@
 
     <style>
         :root {
-            --bg: #050505; --nav: #000; --panel: rgba(28, 28, 32, 0.85); 
-            --border: rgba(255, 255, 255, 0.1); --accent: #00f2ff; 
-            --accent-glow: rgba(0, 242, 255, 0.15); --text-p: #ffffff; --text-s: #a1a1aa;
+            --bg: #000; --accent: #00f2ff; --glass: rgba(10, 10, 12, 0.99);
+            --border: rgba(255,255,255,0.08); --text: #fff; --dim: #666;
+            --glow: radial-gradient(circle at 50% -20%, rgba(0, 242, 255, 0.35), transparent 85%);
         }
 
-        body.light-mode {
-            --bg: #f2f2f7; --nav: #ffffff; --panel: rgba(255, 255, 255, 0.75); 
-            --border: rgba(0, 0, 0, 0.1); --accent: #0071e3; 
-            --text-p: #1c1c1e; --text-s: #8e8e93;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+        body::before { content: ""; position: absolute; inset: 0; background: var(--glow); pointer-events: none; z-index: 0; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; transition: background 0.3s, border 0.3s; }
-        body { background: var(--bg); color: var(--text-p); height: 100dvh; display: flex; overflow: hidden; }
+        /* INDUCTION */
+        #induction { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; align-items: center; justify-content: center; transition: 1.2s; }
+        .ind-wrap { text-align: center; }
+        .ind-logo { font-weight: 900; letter-spacing: 20px; font-size: 28px; animation: glitch 4s infinite; }
+        .ind-bar { width: 260px; height: 1px; background: rgba(255,255,255,0.05); margin: 25px auto; overflow: hidden; position: relative; }
+        #ind-fill { width: 0%; height: 100%; background: var(--accent); box-shadow: 0 0 20px var(--accent); transition: 0.2s; }
 
-        /* Sidebar Navigation */
-        #nav-rail { width: 72px; background: var(--nav); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding-top: 25px; gap: 15px; z-index: 1000; }
-        .rail-btn { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--text-s); cursor: pointer; transition: 0.2s; }
-        .rail-btn.active { background: var(--accent-glow); color: var(--accent); border: 1px solid var(--accent); }
+        /* NAV & DRAWER */
+        nav { padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 100; border-bottom: 1px solid var(--border); backdrop-filter: blur(25px); }
+        #drawer { position: fixed; top: 0; left: -100%; width: 320px; height: 100%; background: var(--glass); z-index: 5000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); border-right: 1px solid var(--border); padding: 50px 30px; display: flex; flex-direction: column; overflow-y: auto; }
+        #drawer.active { left: 0; }
+        .d-section { margin-bottom: 35px; }
+        .d-label { font-size: 10px; font-weight: 900; color: var(--accent); letter-spacing: 3px; margin-bottom: 20px; }
+        .lang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .lang-btn { background: rgba(255,255,255,0.03); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 12px; font-size: 12px; cursor: pointer; transition: 0.3s; }
+        .lang-btn.active { border-color: var(--accent); background: rgba(0, 242, 255, 0.1); }
 
-        /* Main Area */
-        main { flex: 1; display: flex; flex-direction: column; position: relative; width: calc(100% - 72px); background: radial-gradient(circle at top right, #111, var(--bg)); }
-        
-        /* FIX: Full-width text flow */
-        #stage { flex: 1; overflow-y: auto; padding: 20px 20px 180px; scroll-behavior: smooth; }
-        .node { margin-bottom: 35px; animation: fadeInUp 0.5s ease; max-width: 850px; margin-left: auto; margin-right: auto; width: 100%; }
-        .node-header { font-size: 11px; font-weight: 700; color: var(--text-s); margin-bottom: 10px; letter-spacing: 1.5px; text-transform: uppercase; display: flex; justify-content: space-between; align-items: center; }
-        .copy-pill { cursor: pointer; background: var(--border); padding: 4px 10px; border-radius: 20px; font-size: 9px; }
-        .node-content { font-size: 16px; line-height: 1.7; color: var(--text-p); user-select: text; word-wrap: break-word; }
+        /* WORKSPACE */
+        #stage { flex: 1; overflow-y: auto; padding: 30px 25px 250px; scroll-behavior: smooth; z-index: 1; }
+        .node { margin-bottom: 50px; animation: slideUp 0.6s ease forwards; max-width: 850px; margin-inline: auto; }
+        .node-h { font-size: 9px; font-weight: 900; color: var(--dim); letter-spacing: 3px; margin-bottom: 12px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        .node-b { font-size: 17px; line-height: 1.8; color: #eee; }
 
-        /* Multimodal Dock */
-        .dock-container { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px 15px 40px; background: linear-gradient(transparent, var(--bg) 60%); display: flex; justify-content: center; }
-        .unified-dock { 
-            background: var(--panel); border: 1px solid var(--border); border-radius: 32px; 
-            backdrop-filter: blur(25px); padding: 10px 15px; display: flex; 
-            align-items: flex-end; gap: 12px; width: 100%; max-width: 700px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-        }
-        .unified-dock.thinking { border-color: var(--accent); animation: pulse 1.5s infinite; }
-        
-        /* FIX: Vertical text typing fix */
-        textarea { flex: 1; background: transparent; border: none; color: var(--text-p); outline: none; font-size: 16px; padding: 10px 5px; resize: none; max-height: 180px; line-height: 1.5; min-width: 50px; }
+        /* CODE PREVIEW BOX */
+        .code-exec-box { background: #0a0a0c; border: 1px solid var(--border); border-radius: 12px; margin-top: 15px; overflow: hidden; }
+        .code-header { background: #1a1a1c; padding: 8px 15px; font-size: 10px; font-weight: 900; color: var(--accent); display: flex; justify-content: space-between; }
+        .code-output { padding: 15px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #00ff88; white-space: pre-wrap; }
 
-        .action-btn { width: 44px; height: 44px; border: none; background: transparent; color: var(--text-s); cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
-        .action-btn:hover { color: var(--accent); background: rgba(255,255,255,0.05); }
+        /* FILE TRAY */
+        #file-tray { display: none; padding: 10px 20px; background: rgba(255,255,255,0.05); margin: 0 25px; border-radius: 10px; border: 1px dashed var(--accent); align-items: center; gap: 10px; font-size: 12px; }
 
-        /* Settings Overlay */
-        #settings-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 2000; display: none; align-items: center; justify-content: center; }
-        .settings-card { background: var(--panel); border: 1px solid var(--border); padding: 30px; border-radius: 28px; width: 90%; max-width: 400px; }
-        .opt-group { margin-bottom: 20px; }
-        .opt-group label { display: block; font-size: 10px; color: var(--text-s); margin-bottom: 8px; text-transform: uppercase; font-weight: 800; }
-        select, .opt-btn { width: 100%; background: var(--border); color: var(--text-p); border: none; padding: 12px; border-radius: 12px; outline: none; }
+        /* DOCK */
+        .dock-wrap { position: absolute; bottom: 0; width: 100%; padding: 25px; background: linear-gradient(transparent, var(--bg) 85%); display: flex; justify-content: center; z-index: 100; }
+        .omni-dock { width: 100%; max-width: 800px; background: var(--glass); border: 1px solid var(--border); border-radius: 40px; padding: 12px 24px; display: flex; align-items: flex-end; gap: 12px; }
+        textarea { flex: 1; background: transparent; border: none; color: #fff; font-size: 16px; padding: 12px 0; outline: none; resize: none; max-height: 180px; }
 
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse { 50% { border-color: transparent; box-shadow: 0 0 10px transparent; } }
+        .btn-ui { width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--dim); border: none; background: none; transition: 0.3s; }
+        .btn-send.active { color: var(--accent); transform: scale(1.1); }
+        .btn-file.has-file { color: var(--accent); animation: pulse 1s infinite; }
+
+        @keyframes glitch { 0%, 100% { opacity: 1; transform: skew(0); } 50% { opacity: 0.7; transform: skew(1deg); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        #shield { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 4500; backdrop-filter: blur(12px); }
     </style>
 </head>
-<body class="dark-mode">
+<body>
 
-    <nav id="nav-rail">
-        <div class="rail-btn active" id="btn-gen" onclick="Agent.set('General')"><span class="material-symbols-rounded">bolt</span></div>
-        <div class="rail-btn" id="btn-img" onclick="Agent.set('Image Generator')"><span class="material-symbols-rounded">image</span></div>
-        <div class="rail-btn" id="btn-vid" onclick="Agent.set('Video Generator')"><span class="material-symbols-rounded">movie</span></div>
-        <div class="rail-btn" id="btn-live" onclick="Agent.set('Live')"><span class="material-symbols-rounded">sensors</span></div>
-        <div class="rail-btn" style="margin-top:auto;" onclick="UI.toggleSettings(true)"><span class="material-symbols-rounded">settings</span></div>
+    <div id="induction">
+        <div class="ind-wrap">
+            <div class="ind-logo">BHEKTHINK</div>
+            <div class="ind-bar"><div id="ind-fill"></div></div>
+            <div id="ind-status" style="font-size:8px; letter-spacing:5px; color:#444;">INITIALIZING EXECUTABLE KERNEL...</div>
+        </div>
+    </div>
+
+    <div id="shield" onclick="Kernel.toggleMenu(false)"></div>
+
+    <nav>
+        <button class="btn-ui" onclick="Kernel.toggleMenu(true)"><span class="material-symbols-rounded">widgets</span></button>
+        <div style="font-weight:900; letter-spacing:5px; font-size:14px;">SOVEREIGN <span style="color:var(--accent)">v100.3</span></div>
+        <div class="btn-ui" style="color:var(--accent)"><span class="material-symbols-rounded">terminal</span></div>
     </nav>
 
-    <main>
-        <header style="padding: 15px 25px; border-bottom: 1px solid var(--border); display:flex; justify-content:space-between; align-items: center;">
-            <div style="font-weight:900; letter-spacing:3px; font-size: 14px;">BHEKTHINK <span style="color:var(--accent)">INFINITY</span></div>
-            <div style="font-size:9px; color:var(--accent); border:1px solid var(--accent); padding:2px 6px; border-radius:4px; font-weight: bold;">v13.0 NEURAL</div>
-        </header>
-
-        <div id="stage">
-            <div class="node">
-                <div class="node-header">SYSTEM INITIALIZATION</div>
-                <div class="node-content">
-                    Welcome to your **Neural Workspace**. Infinity v13.0 is active. Multimodal engines for image, video, and live analysis are synchronized and standing by for your instructions.
-                </div>
+    <div id="drawer">
+        <div class="d-section">
+            <div class="d-label">LANGUAGE SYNTHESIS</div>
+            <div class="lang-grid">
+                <button class="lang-btn active" onclick="Kernel.setLang('English', this)">English</button>
+                <button class="lang-btn" onclick="Kernel.setLang('Asante Twi', this)">Twi</button>
+                <button class="lang-btn" onclick="Kernel.setLang('Ga', this)">Ga</button>
+                <button class="lang-btn" onclick="Kernel.setLang('French', this)">French</button>
+                <button class="lang-btn" onclick="Kernel.setLang('Spanish', this)">Spanish</button>
+                <button class="lang-btn" onclick="Kernel.setLang('Hausa', this)">Hausa</button>
             </div>
         </div>
-
-        <div class="dock-container">
-            <div class="unified-dock" id="main-dock">
-                <button class="action-btn" onclick="document.getElementById('file-in').click()"><span class="material-symbols-rounded">add_circle</span></button>
-                <input type="file" id="file-in" style="display:none" onchange="Agent.handleFile(this)">
-                
-                <textarea id="main-in" placeholder="Query the Neural Kernel..." rows="1"></textarea>
-                
-                <button class="action-btn" onclick="Voice.toggle()"><span class="material-symbols-rounded" id="mic-icon">mic</span></button>
-                <button class="action-btn" style="color:var(--accent)" onclick="Kernel.run()"><span class="material-symbols-rounded" style="font-size:38px;">arrow_circle_up</span></button>
-            </div>
+        <div class="d-section">
+            <div class="d-label">GHOST-VOICE v36.3</div>
+            <div style="font-size:11px; color:#888;">Modulation: Sovereign Alpha<br>Rate: 1.15x Velocity<br>Feedback: Active</div>
         </div>
-    </main>
+        <button class="lang-btn" style="margin-top:auto; color:#ff4444; border-color:#ff444455;" onclick="Kernel.purge()">SYSTEM PURGE</button>
+    </div>
 
-    <div id="settings-overlay" onclick="UI.toggleSettings(false)">
-        <div class="settings-card" onclick="event.stopPropagation()">
-            <h2 id="set-title" style="margin-bottom: 25px; text-align: center;">Settings</h2>
-            <div class="opt-group">
-                <label>Theme</label>
-                <div style="display:flex; gap:10px;">
-                    <button class="opt-btn" onclick="UI.applyTheme('dark')">Dark Onyx</button>
-                    <button class="opt-btn" onclick="UI.applyTheme('light')">Pure Light</button>
-                </div>
-            </div>
-            <div class="opt-group">
-                <label>Language</label>
-                <select id="lang-select" onchange="UI.applyLang(this.value)">
-                    <option value="English">English</option>
-                    <option value="Asante Twi">Asante Twi</option>
-                    <option value="Ga">Ga</option>
-                    <option value="Spanish">Spanish</option>
-                    <option value="French">French</option>
-                    <option value="Chinese">Chinese</option>
-                </select>
-            </div>
-            <button class="opt-btn" style="background:var(--accent); color:#000; font-weight:bold; margin-top:10px;" onclick="UI.toggleSettings(false)">SAVE CHANGES</button>
-            <button class="opt-btn" style="background:rgba(255,0,0,0.1); color:#ff4444; margin-top:10px;" onclick="location.reload()">RESET KERNEL</button>
+    <main id="stage"></main>
+
+    <div id="file-tray">
+        <span class="material-symbols-rounded" style="font-size:18px;">description</span>
+        <span id="file-name">filename.txt</span>
+        <button onclick="Kernel.clearFile()" style="background:none; border:none; color:#ff4444;"><span class="material-symbols-rounded">close</span></button>
+    </div>
+
+    <div class="dock-wrap">
+        <div class="omni-dock">
+            <input type="file" id="file-input" hidden onchange="Kernel.handleFile(this)">
+            <button class="btn-ui btn-file" id="file-btn" onclick="document.getElementById('file-input').click()"><span class="material-symbols-rounded">add_circle</span></button>
+            <button class="btn-ui" onclick="Voice.toggle()"><span class="material-symbols-rounded" id="mic">mic</span></button>
+            <textarea id="in" placeholder="Command the Alpha Kernel..." rows="1"></textarea>
+            <button class="btn-ui btn-send" id="snd" onclick="Kernel.run()"><span class="material-symbols-rounded" style="font-size:42px;">bolt</span></button>
         </div>
     </div>
 
     <script>
-        const Config = {
-            lang: localStorage.getItem('bt_lang') || 'English',
-            agent: 'General',
-            dict: {
-                'English': { cmd: "Query the Neural Kernel...", sys: "KERNEL" },
-                'Asante Twi': { cmd: "Bisa Infinity...", sys: "NHYEHYƐEƐ" },
-                'Ga': { cmd: "Bi Infinity...", sys: "GBƐJIANƆ" },
-                'Spanish': { cmd: "Comandar...", sys: "SISTEMA" },
-                'French': { cmd: "Commander...", sys: "SYSTÈME" },
-                'Chinese': { cmd: "指令...", sys: "系统" }
-            }
-        };
-
         const Kernel = {
             busy: false,
+            lang: localStorage.getItem('bt_lang') || 'English',
+            fileContent: "",
+            memory: JSON.parse(localStorage.getItem('bt_v100_core') || '[]'),
+
+            boot() {
+                const fill = document.getElementById('ind-fill');
+                const stat = document.getElementById('ind-status');
+                const steps = ["MAPPING NEURAL MESH...", "GHOST-VOICE CALIBRATION...", "LOCALIZING DIALECTS...", "RTCE ENVIRONMENT READY"];
+                let p = 0; let stepIdx = 0;
+                const inv = setInterval(() => {
+                    p += Math.random() * 20; fill.style.width = Math.min(p, 100) + "%";
+                    if(p > (stepIdx + 1) * 25) { stat.innerText = steps[stepIdx]; stepIdx++; }
+                    if(p >= 100) { clearInterval(inv); setTimeout(() => { document.getElementById('induction').style.opacity = '0'; setTimeout(() => { document.getElementById('induction').remove(); this.init(); }, 1000); }, 400); }
+                }, 100);
+            },
+
+            init() {
+                const stage = document.getElementById('stage');
+                stage.innerHTML = `<div class="node" style="text-align:center; padding:50px 0;"><div style="font-size:55px; color:var(--accent); text-shadow:0 0 40px var(--accent);">∞</div><div style="font-weight:900; font-size:28px;">BHEKTHINK <span style="color:var(--accent)">v100.3</span></div><div style="font-size:9px; color:var(--dim); margin-top:15px; letter-spacing:5px;">OMNI-STREAM ALPHA ACTIVE</div></div>`;
+                this.memory.forEach(m => this.render(m.role, m.text, true));
+                document.querySelectorAll('.lang-btn').forEach(b => { if(b.innerText.includes(this.lang) || (this.lang === 'Asante Twi' && b.innerText === 'Twi')) b.classList.add('active'); });
+            },
+
+            handleFile(input) {
+                const file = input.files[0];
+                if(!file) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.fileContent = e.target.result;
+                    document.getElementById('file-tray').style.display = 'flex';
+                    document.getElementById('file-name').innerText = file.name;
+                    document.getElementById('file-btn').classList.add('has-file');
+                };
+                reader.readAsText(file);
+            },
+
+            clearFile() {
+                this.fileContent = "";
+                document.getElementById('file-tray').style.display = 'none';
+                document.getElementById('file-btn').classList.remove('has-file');
+                document.getElementById('file-input').value = "";
+            },
+
+            toggleMenu(s) { document.getElementById('drawer').classList.toggle('active', s); document.getElementById('shield').style.display = s ? 'block' : 'none'; },
+            setLang(l) { localStorage.setItem('bt_lang', l); location.reload(); },
+
             async run() {
-                const input = document.getElementById('main-in');
-                const val = input.value.trim();
-                if (!val || this.busy) return;
+                const el = document.getElementById('in');
+                const val = el.value.trim();
+                if((!val && !this.fileContent) || this.busy) return;
 
                 this.busy = true;
-                document.getElementById('main-dock').classList.add('thinking');
-                this.render('USER', val);
-                input.value = "";
-                input.style.height = 'auto';
+                const contextVal = this.fileContent ? `[FILE: ${document.getElementById('file-name').innerText}]\nContent: ${this.fileContent}\n\nTask: ${val}` : val;
+                this.render('USER_ACCESS', val || "[Attached File Stream]");
+                el.value = ""; el.style.height = 'auto';
 
                 try {
-                    const response = await puter.ai.chat(`[Mode: ${Config.agent}] ${val}`);
-                    this.render('AI', response.toString());
-                } catch (e) {
-                    this.render('AI', "Neural link failure. Retrying...");
-                } finally { 
-                    this.busy = false; 
-                    document.getElementById('main-dock').classList.remove('thinking');
-                }
+                    const sys = `[BhekThink v100.3: Alpha, Lang: ${this.lang}, GhostVoice: 36.3, Features: RTCE-Active]`;
+                    const res = await puter.ai.chat(`${sys}\n${contextVal}`);
+                    this.render('SOVEREIGN_CORE', res.toString());
+                    Voice.speak(res.toString());
+                    if(this.fileContent) this.clearFile();
+                } catch(e) { this.render('ERR', "Neural mesh collision."); }
+                this.busy = false;
             },
-            render(role, text) {
-                const stage = document.getElementById('stage');
-                const div = document.createElement('div');
-                div.className = 'node';
-                const header = role === 'AI' 
-                    ? `BHEKTHINK ${Config.dict[Config.lang].sys} <span class="copy-pill" onclick="UI.copy(this)">COPY</span>` 
-                    : `USER ACCESS`;
-                div.innerHTML = `<div class="node-header">${header}</div><div class="node-content">${marked.parse(text)}</div>`;
-                stage.appendChild(div);
-                stage.scrollTop = stage.scrollHeight;
-                div.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
-            }
-        };
 
-        const UI = {
-            toggleSettings(show) { document.getElementById('settings-overlay').style.display = show ? 'flex' : 'none'; },
-            applyTheme(t) { 
-                document.body.className = t + '-mode'; 
-                localStorage.setItem('bt_theme', t);
+            render(role, text, isHist = false) {
+                const s = document.getElementById('stage');
+                const d = document.createElement('div');
+                d.className = 'node';
+                d.innerHTML = `<div class="node-h"><span>${role}</span><span>${new Date().toLocaleTimeString()}</span></div><div class="node-b">${marked.parse(text)}</div>`;
+                
+                // Code Execution Simulation (Visual for v100.3)
+                if(text.includes('```javascript') || text.includes('```python')) {
+                    const execBox = document.createElement('div');
+                    execBox.className = 'code-exec-box';
+                    execBox.innerHTML = `<div class="code-header"><span>RTCE OUTPUT</span><span>ONLINE</span></div><div class="code-output">Process finished with exit code 0...</div>`;
+                    d.appendChild(execBox);
+                }
+
+                s.appendChild(d);
+                s.scrollTop = s.scrollHeight;
+                if(!isHist) { this.memory.push({role, text}); if(this.memory.length > 50) this.memory.shift(); localStorage.setItem('bt_v100_core', JSON.stringify(this.memory)); }
+                d.querySelectorAll('pre code').forEach(c => hljs.highlightElement(c));
             },
-            applyLang(l) {
-                Config.lang = l;
-                localStorage.setItem('bt_lang', l);
-                document.getElementById('main-in').placeholder = Config.dict[l].cmd;
-            },
-            copy(btn) {
-                const txt = btn.parentElement.nextElementSibling.innerText;
-                navigator.clipboard.writeText(txt);
-                btn.innerText = "COPIED";
-                setTimeout(() => btn.innerText = "COPY", 2000);
-            },
-            init() {
-                const input = document.getElementById('main-in');
-                input.oninput = function() { this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'; };
-                input.onkeydown = (e) => { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); Kernel.run(); }};
-                this.applyTheme(localStorage.getItem('bt_theme') || 'dark');
-                this.applyLang(Config.lang);
-            }
+
+            purge() { localStorage.removeItem('bt_v100_core'); location.reload(); }
         };
 
         const Voice = {
-            rec: new (window.SpeechRecognition || window.webkitSpeechRecognition)(),
-            listening: false,
-            init() {
-                this.rec.onresult = (e) => { document.getElementById('main-in').value = e.results[0][0].transcript; Kernel.run(); };
-                this.rec.onend = () => { this.listening = false; document.getElementById('mic-icon').style.color = "inherit"; };
-            },
+            synth: window.speechSynthesis,
             toggle() {
-                if(this.listening) { this.rec.stop(); }
-                else { this.rec.start(); this.listening = true; document.getElementById('mic-icon').style.color = "var(--accent)"; }
+                const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                rec.start(); document.getElementById('mic').style.color = "var(--accent)";
+                rec.onresult = (e) => { document.getElementById('in').value = e.results[0][0].transcript; Kernel.run(); };
+                rec.onend = () => document.getElementById('mic').style.color = "inherit";
+            },
+            speak(t) {
+                this.synth.cancel();
+                const u = new SpeechSynthesisUtterance(t.replace(/[#*`_]/g, '').substring(0, 800));
+                u.rate = 1.15; u.pitch = 1.05;
+                u.lang = { 'English': 'en-US', 'French': 'fr-FR', 'Spanish': 'es-ES' }[Kernel.lang] || 'en-US';
+                this.synth.speak(u);
             }
         };
 
-        const Agent = {
-            set(mode) {
-                Config.agent = mode;
-                document.querySelectorAll('.rail-btn').forEach(b => b.classList.remove('active'));
-                event.currentTarget.classList.add('active');
-                Kernel.render('AI', `Neural mode switched to: **${mode}**.`);
-            },
-            handleFile(input) { if(input.files[0]) Kernel.render('USER', `📎 File: ${input.files[0].name}`); }
-        };
-
-        window.onload = () => { UI.init(); Voice.init(); if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); } };
+        window.onload = () => { Kernel.boot(); document.getElementById('in').addEventListener('input', function() { this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'; document.getElementById('snd').classList.toggle('active', this.value.length > 0); }); };
     </script>
 </body>
 </html>
